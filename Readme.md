@@ -21,8 +21,8 @@ This work was completed as part of the ST 3011 assignment (Group 08).
 
 **1. Clone the repository:**
 ```bash
-git clone https://github.com/YourUsername/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/rashmithanilum/Sri-Lanka-Tea-Production-Analysis.git
+cd Sri-Lanka-Tea-Production-Analysis
 ```
 
 **2. Install dependencies:**
