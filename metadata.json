@@ -1,0 +1,177 @@
+{
+  "project": "Tea Production Forecasting \u2014 World Model (with Structural Zeros)",
+  "data": {
+    "combo_definition": "Elevation \u00d7 Tea Type",
+    "exogenous_variables": [
+      "Rain fall",
+      "Humidity",
+      "Air Tempurature"
+    ],
+    "all_combos": [
+      {
+        "Elevation": "HIGH",
+        "Tea Type": "BIO TEA"
+      },
+      {
+        "Elevation": "HIGH",
+        "Tea Type": "CTC TEA"
+      },
+      {
+        "Elevation": "HIGH",
+        "Tea Type": "GREEN TEA"
+      },
+      {
+        "Elevation": "HIGH",
+        "Tea Type": "INSTANT TEA"
+      },
+      {
+        "Elevation": "HIGH",
+        "Tea Type": "ORTHODOX TEA"
+      },
+      {
+        "Elevation": "HIGH",
+        "Tea Type": "RECLAIMED TEA"
+      },
+      {
+        "Elevation": "HIGH",
+        "Tea Type": "TOTAL BLACK TEA"
+      },
+      {
+        "Elevation": "LOW",
+        "Tea Type": "BIO TEA"
+      },
+      {
+        "Elevation": "LOW",
+        "Tea Type": "CTC TEA"
+      },
+      {
+        "Elevation": "LOW",
+        "Tea Type": "GREEN TEA"
+      },
+      {
+        "Elevation": "LOW",
+        "Tea Type": "INSTANT TEA"
+      },
+      {
+        "Elevation": "LOW",
+        "Tea Type": "ORTHODOX TEA"
+      },
+      {
+        "Elevation": "LOW",
+        "Tea Type": "RECLAIMED TEA"
+      },
+      {
+        "Elevation": "LOW",
+        "Tea Type": "TOTAL BLACK TEA"
+      },
+      {
+        "Elevation": "MEDIUM",
+        "Tea Type": "BIO TEA"
+      },
+      {
+        "Elevation": "MEDIUM",
+        "Tea Type": "CTC TEA"
+      },
+      {
+        "Elevation": "MEDIUM",
+        "Tea Type": "GREEN TEA"
+      },
+      {
+        "Elevation": "MEDIUM",
+        "Tea Type": "INSTANT TEA"
+      },
+      {
+        "Elevation": "MEDIUM",
+        "Tea Type": "ORTHODOX TEA"
+      },
+      {
+        "Elevation": "MEDIUM",
+        "Tea Type": "RECLAIMED TEA"
+      },
+      {
+        "Elevation": "MEDIUM",
+        "Tea Type": "TOTAL BLACK TEA"
+      }
+    ],
+    "structural_zero_combos": [
+      {
+        "Elevation": "LOW",
+        "Tea Type": "INSTANT TEA"
+      },
+      {
+        "Elevation": "MEDIUM",
+        "Tea Type": "INSTANT TEA"
+      }
+    ],
+    "structural_zero_policy": "Force share_pred_raw=0 for these combos, then renormalize shares per month."
+  },
+  "models": {
+    "total_model": {
+      "type": "SARIMAX",
+      "order": [
+        2,
+        0,
+        2
+      ],
+      "seasonal_order": [
+        1,
+        1,
+        1,
+        12
+      ],
+      "period": 12,
+      "exog_cols": [
+        "Rain fall",
+        "Humidity",
+        "Air Tempurature"
+      ]
+    },
+    "share_model": {
+      "type": "CatBoostRegressor",
+      "feature_cols": [
+        "Elevation",
+        "Tea Type",
+        "Rain fall",
+        "Humidity",
+        "Air Tempurature",
+        "month_sin",
+        "month_cos",
+        "share_lag_1",
+        "share_lag_2",
+        "share_lag_3",
+        "share_lag_4",
+        "share_lag_5",
+        "share_lag_6",
+        "share_lag_7",
+        "share_lag_8",
+        "share_lag_9",
+        "share_lag_10",
+        "share_lag_11",
+        "share_lag_12",
+        "share_roll3",
+        "share_roll6"
+      ],
+      "categorical_features": [
+        "Elevation",
+        "Tea Type"
+      ]
+    }
+  },
+  "feature_engineering": {
+    "share_target": "share = combo_y / total_y",
+    "lags": 12,
+    "rolling_windows": [
+      3,
+      6
+    ],
+    "month_encoding": [
+      "month_sin",
+      "month_cos"
+    ],
+    "renormalization": "share_pred := share_pred_raw / sum_over_combos(share_pred_raw) each month",
+    "structural_zeros_enforced": true
+  },
+  "reproducibility": {
+    "seed": 42
+  }
+}

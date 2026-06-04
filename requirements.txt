@@ -1,0 +1,8 @@
+streamlit
+pandas
+numpy
+plotly
+joblib
+statsmodels
+catboost
+openpyxl
